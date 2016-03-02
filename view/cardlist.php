@@ -3,7 +3,8 @@
 
 <body>
 
-<table>
+<form name="deckForm" method="post" action="deck.php">
+<div style="overflow: auto; width:420px; height:700px; float:left"><table>
 	<tr><td>In Pool</td><td>Index</td><td>Name</td><td>Mana Cost</td></tr>
 	<?php 
 
@@ -30,7 +31,22 @@
 		}
 
 	?>
-</table>
+</table></div>
+
+<div style="float:left">
+Deck size<br>
+<input type="radio" name="size" value="40" checked>40<br>
+<input type="radio" name="size" value="60" checked>60<br>
+<br>Colors<br>
+<input type="checkbox" name="colors" value="W">W<br>
+<input type="checkbox" name="colors" value="U">U<br>
+<input type="checkbox" name="colors" value="B">B<br>
+<input type="checkbox" name="colors" value="R">R<br>
+<input type="checkbox" name="colors" value="G">G<br>
+<br>
+<input type="submit" value="Deck!">
+</div>
+</form>
 
 </body>
 </html>
