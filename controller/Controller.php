@@ -48,8 +48,13 @@ class Controller {
 	public function makePool() {
 		$cards = $this->model->getSetCardList();
 		$count = $_POST["count"];
+		$size = $this->model->getSize();
 		foreach($cards as $index => $card) {
 			$ct = $count[$index+1];
+			// trim 5+ copies to 4 in 60-card
+			if($size == 60 && $ct > 4) {
+				$ct = 4;
+			}
 			for($i=0;$i<$ct;$i++) {
 				//add cards to pool
 				$this->model->addToPool($card);
@@ -59,8 +64,8 @@ class Controller {
 
 	// turn pool into a deck!
 	public function processPool($p) {
-		$colorPool = $this->filterColor($p);
-		return $colorPool;
+		$p = $this->filterColor($p);
+		return $p;
 	}
 
 	// filter the pool by color
@@ -87,6 +92,8 @@ class Controller {
 		}
 		return $colorPool;
 	}
+
+	// trim excess copies past what we 
 
 }
 
