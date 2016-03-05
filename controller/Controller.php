@@ -15,34 +15,41 @@ class Controller {
 		{
 			// if no card specified, return all cards
 			$cards = $this->model->getSetCardList();
-			include 'view/cardlist.php';
+			include 'view/form.php';
 		}
 		// on card clicked
+		// XXX: this is going away, and the whole method refactored
 		else if(isset($_GET['card'])) {
 			// show the requested card, if specified
 			$card = $this->model->getCard($_GET['card']);
-			include 'view/viewcard.php';
+			include 'view/card.php';
 		}
 	}
 
 	// on pool submit
 	public function submit() {
+		// get our POST vars
 		$size = $_POST["size"];
-		echo $size;
-		$pool = $this->makePool();
-		include 'view/test.php';
+		$colors = $_POST["colors"];
+		// generate pool
+		$this->makePool();
+		// get the one we made
+		$pool = $this->model->getPool();
+		include 'view/pool.php';
 	}
 
+	// populate pool
 	public function makePool() {
 		$cards = $this->model->getSetCardList();
+		$count = $_POST["count"];
 		foreach($cards as $index => $card) {
-			$ct = $_POST["count"][$index];
-			for($i=0;$i<$ct;$i+=1) {
-				$pool[] = $card;
+			$ct = $count[$index+1];
+			for($i=0;$i<$ct;$i++) {
+				//add cards to pool
+				$this->model->addToPool($card);
 			}
 		}
 	}
-
 }
 
 ?>

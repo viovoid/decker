@@ -3,6 +3,7 @@
 
 <body>
 <?php if($_SERVER['REQUEST_METHOD'] == 'POST') {
+	// XXX: do i actually have to make a new one?
 	$_controller = new Controller();
 	$_controller->submit();
 	die();
@@ -13,9 +14,10 @@
 <div style="overflow: auto; width:420px; height:700px; float:left"><table>
 	<tr><td>In Pool</td><td>Index</td><td>Name</td><td>Mana Cost</td></tr>
 	<?php 
-
+		
 		foreach ($cards as $index => $card) {
 			echo '<tr>';
+			// XXX: rewrite this as a loop?
 			echo '<td><select name="count['.$card->index.']">'
 					.'<option selected="selected" value="0">0</option>'
 					.'<option value="1">1</option>'
