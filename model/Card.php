@@ -9,8 +9,7 @@ class Card {
 	public $rarity;
 	public $cardType;
 	
-	public function __construct($index, $name, $colorIDs, $manaCost, $cmc, $rarity, $cardType)  
-    {  
+	public function __construct($index, $name, $colorIDs, $manaCost, $cmc, $rarity, $cardType) {  
         $this->index = $index;
 	    $this->name = $name;
 	    $this->colorIDs = $colorIDs;

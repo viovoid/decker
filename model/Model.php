@@ -3,8 +3,7 @@
 include_once("model/Card.php");
 
 class Model {
-	public function getSetCardList()
-	{
+	public function getSetCardList() {
 
 		$set = "BFZ";
 		$rawJson = file_get_contents("/srv/http/decker/json/" . $set . ".json");
@@ -27,15 +26,13 @@ class Model {
 		return $cards;
 	}
 	
-	public function getCard($title)
-	{
+	public function getCard($index) {
 		// we use the previous function to get all the books and then we return the requested one.
 		// in a real life scenario this will be done through a db select command
 		$allCards = $this->getSetCardList();
-		return $allCards[$title];
+		return $allCards[$index];
 	}
-	
-	
+
 }
 
 ?>

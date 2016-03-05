@@ -1,17 +1,22 @@
 <html>
-<head></head>
+<title>Decker</title>
 
 <body>
+<?php if($_SERVER['REQUEST_METHOD'] == 'POST') {
+	$_controller = new Controller();
+	$_controller->submit();
+	die();
+}
+?>
 
-<form name="deckForm" method="post" action="deck.php">
+<form name="deckForm" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <div style="overflow: auto; width:420px; height:700px; float:left"><table>
 	<tr><td>In Pool</td><td>Index</td><td>Name</td><td>Mana Cost</td></tr>
 	<?php 
 
-		foreach ($cards as $index => $card)
-		{
+		foreach ($cards as $index => $card) {
 			echo '<tr>';
-			echo '<td><select name="selectCount">'
+			echo '<td><select name="count['.$card->index.']">'
 					.'<option selected="selected" value="0">0</option>'
 					.'<option value="1">1</option>'
 					.'<option value="2">2</option>'
@@ -38,13 +43,13 @@ Deck size<br>
 <input type="radio" name="size" value="40" checked>40<br>
 <input type="radio" name="size" value="60" checked>60<br>
 <br>Colors<br>
-<input type="checkbox" name="colors" value="W">W<br>
-<input type="checkbox" name="colors" value="U">U<br>
-<input type="checkbox" name="colors" value="B">B<br>
-<input type="checkbox" name="colors" value="R">R<br>
-<input type="checkbox" name="colors" value="G">G<br>
+<input type="checkbox" name="colors[]" value="W">W<br>
+<input type="checkbox" name="colors[]" value="U">U<br>
+<input type="checkbox" name="colors[]" value="B">B<br>
+<input type="checkbox" name="colors[]" value="R">R<br>
+<input type="checkbox" name="colors[]" value="G">G<br>
 <br>
-<input type="submit" value="Deck!">
+<input type="submit" name="submit" value="Deck!">
 </div>
 </form>
 
