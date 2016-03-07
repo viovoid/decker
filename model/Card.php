@@ -18,6 +18,10 @@ class Card {
 	    $this->rarity = $rarity;
 	    $this->cardType = $cardType;
     } 
+
+	public function getColors() {
+		return $this->colorIDs;
+	}
 }
 
 ?>

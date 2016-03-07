@@ -4,7 +4,10 @@ include_once("model/Card.php");
 
 class Model {
 
+	protected $cards = array();
 	protected $pool = array();
+	protected $size = 0;
+	protected $colors = array();
 
 	public function getSetCardList() {
 
@@ -43,11 +46,25 @@ class Model {
 		$this->pool[] = $card;
 	}
 
-	// get
 	public function getPool() {
 		return $this->pool;
 	}
+	
+	public function setSize($s) {
+		$this->size = $s;
+	}
 
+	public function getSize() {
+		return $this->size;
+	}
+
+	public function setColors($c) {
+		$this->colors = $c;
+	}
+
+	public function getColors() {
+		return $this->colors;
+	}
 }
 
 ?>

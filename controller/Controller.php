@@ -29,12 +29,18 @@ class Controller {
 	// on pool submit
 	public function submit() {
 		// get our POST vars
-		$size = $_POST["size"];
-		$colors = $_POST["colors"];
+		$this->model->setSize($_POST["size"]);
+		$this->model->setColors($_POST["colors"]);
 		// generate pool
 		$this->makePool();
+
 		// get the one we made
 		$pool = $this->model->getPool();
+		$size = $this->model->getSize();
+		$colors = $this->model->getColors();
+
+		$colorPool = $this->processPool($pool);
+
 		include 'view/pool.php';
 	}
 
@@ -50,6 +56,32 @@ class Controller {
 			}
 		}
 	}
+
+	// turn pool into a deck!
+	public function processPool($p) {
+		$colorPool = $this->filterColor($p);
+	}
+
+	// filter the pool by color
+	public function filterColor($p) {
+		$colorPool = array();
+		// for each card in pool...
+		foreach($p as $card) {
+			// for each color of card
+			foreach($card->getColors() as $cardCol) {
+				//for each color selected
+				foreach($this->model->getColors() as $selCol) {
+//echo $cardCol . $selCol."<br>";
+					/*if($cardCol == $selCol)*/ {
+						$colorPool[] = $card;
+						break 2;
+					}						
+				}
+			}
+		}
+		return $colorPool;
+	}
+
 }
 
 ?>
