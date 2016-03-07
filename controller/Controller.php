@@ -68,15 +68,20 @@ class Controller {
 		$colorPool = array();
 		// for each card in pool...
 		foreach($p as $card) {
-			// for each color of card...
-			foreach($card->getColors() as $cardCol) {
-				//for each color selected...
-				foreach($this->model->getColors() as $selCol) {
-					//add card to colorPool if there is a color match!
-					if($cardCol == $selCol) {
-						$colorPool[] = $card;
-						break 2;
-					}						
+			//if card has no color ID, add it to colorPool
+			if($card->getColors() == null) {
+				$colorPool[] = $card;
+			} else {
+				// for each color of card...
+				foreach($card->getColors() as $cardCol) {
+					//for each color selected...
+					foreach($this->model->getColors() as $selCol) {
+						//add card to colorPool if there is a color match!
+						if($cardCol == $selCol) {
+							$colorPool[] = $card;
+							break 2;
+						}						
+					}
 				}
 			}
 		}
