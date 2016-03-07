@@ -60,6 +60,7 @@ class Controller {
 	// turn pool into a deck!
 	public function processPool($p) {
 		$colorPool = $this->filterColor($p);
+		return $colorPool;
 	}
 
 	// filter the pool by color
@@ -67,12 +68,12 @@ class Controller {
 		$colorPool = array();
 		// for each card in pool...
 		foreach($p as $card) {
-			// for each color of card
+			// for each color of card...
 			foreach($card->getColors() as $cardCol) {
-				//for each color selected
+				//for each color selected...
 				foreach($this->model->getColors() as $selCol) {
-//echo $cardCol . $selCol."<br>";
-					/*if($cardCol == $selCol)*/ {
+					//add card to colorPool if there is a color match!
+					if($cardCol == $selCol) {
 						$colorPool[] = $card;
 						break 2;
 					}						
