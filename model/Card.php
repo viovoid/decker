@@ -27,6 +27,17 @@ class Card {
 		return $this->colorIDs;
 	}
 
+	public function getManaCost() {
+		return $this->manaCost;
+	}
+
+	public function getCMC() {
+		return $this->cmc;
+	}
+
+	public function getCardTypes() {
+		return $this->cardType;
+	}
 }
 
 ?>

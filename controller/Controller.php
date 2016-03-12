@@ -39,7 +39,7 @@ class Controller {
 		$size = $this->model->getSize();
 		$colors = $this->model->getColors();
 
-		$colorPool = $this->processPool($pool);
+		$pool = $this->processPool($pool);
 
 		include 'view/pool.php';
 	}
@@ -66,6 +66,15 @@ class Controller {
 	public function processPool($p) {
 		$p = $this->filterColor($p);
 		$p = $this->filterBasics($p);
+
+		$cardCount = count($p);
+		$avgCMC = $this->averageCMC($p);
+
+		$nonLandCount = $this->countNonLands($p);
+		if(($this->model->getSize() == 60 && $nonLandCount <= 38)
+		|| ($this->model->getSize() == 40 && $nonLandCount <= 22)) {
+			$p = addBasics($p);
+		}
 		return $p;
 	}
 
@@ -107,6 +116,33 @@ class Controller {
 					break;
 			}
 		}
+		return $p;
+	}
+
+	// average converted mana cost in pool
+	public function averageCMC($p) {
+		$total = 0;
+		foreach($p as $card) {
+			$total += $card->getCMC();
+		}
+		return ($total /= count($p));
+	}
+
+	// count nonland cards in pool
+	public function countNonLands($p) {
+		foreach($p as $index => $card) {
+			$types = $card->getCardTypes();
+			foreach($types as $type) {
+				if($type == "Land") {
+					unset($p[$index]);
+				}
+			}
+		}
+		return count($p);
+	}
+
+	// add basic lands
+	public function addBasics() {
 		return $p;
 	}
 }
