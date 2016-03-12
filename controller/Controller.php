@@ -71,27 +71,25 @@ class Controller {
 
 	// filter the pool by color
 	public function filterColor($p) {
-		$colorPool = array();
 		// for each card in pool...
-		foreach($p as $card) {
-			// if card has no color ID, add it to colorPool
-			if($card->getColors() == null) {
-				$colorPool[] = $card;
-			} else {
-				// for each color of card...
-				foreach($card->getColors() as $cardCol) {
-					// for each color selected...
-					foreach($this->model->getColors() as $selCol) {
-						// add card to colorPool if there is a color match!
-						if($cardCol == $selCol) {
-							$colorPool[] = $card;
-							break 2;
-						}						
+		foreach($p as $index => $card) {
+			// for each color of card...
+			foreach($card->getColors() as $cardCol) {
+				$r = 0;
+				// for each color selected...
+				foreach($this->model->getColors() as $selCol) {
+					// if color is selected, the card stays
+					if($cardCol == $selCol) {
+						$r = 1;
 					}
+				}
+				// remove card if it has a color not selected
+				if($r == 0) {
+					unset($p[$index]);
 				}
 			}
 		}
-		return $colorPool;
+		return $p;
 	}
 
 	// remove (main 5) basic lands, since we'll be adding them ourselves
