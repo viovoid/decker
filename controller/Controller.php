@@ -73,7 +73,7 @@ class Controller {
 		$nonLandCount = $this->countNonLands($p);
 		if(($this->model->getSize() == 60 && $nonLandCount <= 38)
 		|| ($this->model->getSize() == 40 && $nonLandCount <= 22)) {
-			$p = addBasics($p);
+			$p = $this->addBasics($p);
 		}
 		return $p;
 	}
@@ -142,9 +142,11 @@ class Controller {
 	}
 
 	// add basic lands
-	public function addBasics() {
+	public function addBasics($p) {
 		return $p;
 	}
+
+	
 }
 
 ?>
