@@ -19,9 +19,14 @@ class Card {
 	    $this->cardType = $cardType;
     } 
 
+	public function getName() {
+		return $this->name;
+	}
+
 	public function getColors() {
 		return $this->colorIDs;
 	}
+
 }
 
 ?>

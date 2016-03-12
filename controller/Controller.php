@@ -65,6 +65,7 @@ class Controller {
 	// turn pool into a deck!
 	public function processPool($p) {
 		$p = $this->filterColor($p);
+		$p = $this->filterBasics($p);
 		return $p;
 	}
 
@@ -73,15 +74,15 @@ class Controller {
 		$colorPool = array();
 		// for each card in pool...
 		foreach($p as $card) {
-			//if card has no color ID, add it to colorPool
+			// if card has no color ID, add it to colorPool
 			if($card->getColors() == null) {
 				$colorPool[] = $card;
 			} else {
 				// for each color of card...
 				foreach($card->getColors() as $cardCol) {
-					//for each color selected...
+					// for each color selected...
 					foreach($this->model->getColors() as $selCol) {
-						//add card to colorPool if there is a color match!
+						// add card to colorPool if there is a color match!
 						if($cardCol == $selCol) {
 							$colorPool[] = $card;
 							break 2;
@@ -93,8 +94,23 @@ class Controller {
 		return $colorPool;
 	}
 
-	// trim excess copies past what we 
-
+	// remove (main 5) basic lands, since we'll be adding them ourselves
+	public function filterBasics($p) {
+		// for each card in pool...
+		foreach($p as $index => $card) {
+			// drop basics
+			switch($card->getName()) {
+				case "Plains":
+				case "Island":
+				case "Swamp":
+				case "Mountain":
+				case "Forest":
+					unset($p[$index]);
+					break;
+			}
+		}
+		return $p;
+	}
 }
 
 ?>
