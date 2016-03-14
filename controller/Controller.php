@@ -143,9 +143,52 @@ class Controller {
 
 	// add basic lands
 	public function addBasics($p) {
+		//total mana symbols so we can find the right split
+		$manaSymbols = $this->countManaSymbols($p);
+		$landSlots = $this->model->getSize() - count($p);
+		$basicsCount = $this->calcBasics($manaSymbols, $landSlots);
+
+		//actually add the basics to pool
+		//XXX: do something about wastes
+		for($i=0; $i<$basicsCount["W"];$i++) $p[] = new Card(0, "Plains", "W", 0, 0, "B", "Basic Land");
+		for($i=0; $i<$basicsCount["U"];$i++) $p[] = new Card(0, "Island", "U", 0, 0, "B", "Basic Land");
+		for($i=0; $i<$basicsCount["B"];$i++) $p[] = new Card(0, "Swamp", "B", 0, 0, "B", "Basic Land");
+		for($i=0; $i<$basicsCount["R"];$i++) $p[] = new Card(0, "Mountain", "R", 0, 0, "B", "Basic Land");
+		for($i=0; $i<$basicsCount["G"];$i++) $p[] = new Card(0, "Forest", "G", 0, 0, "B", "Basic Land");
 		return $p;
 	}
 
+	//count total mana symbols per color in pool
+	public function countManaSymbols($p) {
+		//XXX: if adding other sets, add phyrexian/snow/etc
+			$symbols = array("C"=>0,
+							"W"=>0,
+							"U"=>0,
+							"B"=>0,
+							"R"=>0,
+							"G"=>0);
+		foreach($p as $card) {
+			$symbols["C"] += substr_count($card->getManaCost(), "C");
+			$symbols["W"] += substr_count($card->getManaCost(), "W");
+			$symbols["U"] += substr_count($card->getManaCost(), "U");
+			$symbols["B"] += substr_count($card->getManaCost(), "B");
+			$symbols["R"] += substr_count($card->getManaCost(), "R");
+			$symbols["G"] += substr_count($card->getManaCost(), "G");
+		}
+		return $symbols;
+	}
+
+	//determine basics split from mana symbols
+	public function calcBasics($manaSymbols, $landCount) {
+		$totalSymbols = array_sum($manaSymbols);
+		$basics["C"] = round($manaSymbols["C"] / $totalSymbols * $landCount);
+		$basics["W"] = round($manaSymbols["W"] / $totalSymbols * $landCount);
+		$basics["U"] = round($manaSymbols["U"] / $totalSymbols * $landCount);
+		$basics["B"] = round($manaSymbols["B"] / $totalSymbols * $landCount);
+		$basics["R"] = round($manaSymbols["R"] / $totalSymbols * $landCount);
+		$basics["G"] = round($manaSymbols["G"] / $totalSymbols * $landCount);
+		return $basics;
+	}
 	
 }
 
