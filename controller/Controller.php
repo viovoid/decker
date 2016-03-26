@@ -70,11 +70,18 @@ class Controller {
 		$cardCount = count($p);
 		$avgCMC = $this->averageCMC($p);
 
-		$nonLandCount = $this->countNonLands($p);
-		if(($this->model->getSize() == 60 && $nonLandCount <= 38)
-		|| ($this->model->getSize() == 40 && $nonLandCount <= 22)) {
-			$p = $this->addBasics($p);
+		// trim a card until we hit the sweet spot
+		$isSaturated = false;
+		while(!$isSaturated) {
+			$nonLandCount = $this->countNonLands($p);
+			if(($this->model->getSize() == 60 && $nonLandCount >= 38)
+			|| ($this->model->getSize() == 40 && $nonLandCount >= 22)) {
+				$p = $this->trim($p);
+			} else {
+				$isSaturated = true;
+			}
 		}
+		$p = $this->addBasics($p);
 		return $p;
 	}
 
@@ -141,6 +148,34 @@ class Controller {
 		return count($p);
 	}
 
+	// remove a card
+	public function trim($p) {
+		// give us 17 0s, since max cost as of now is 16
+		// (not counting Gleemax, of course)
+		for($c=0;$c<=16;$c++) {
+			$cmcList[] = 0;
+		}
+		// count cards by cmc
+		//XXX: this probably doesn't need to be done every time...
+		//     move out of function?
+		foreach($p as $index => $card) {
+			$cmcCounts[$card->getCMC()]++;
+		}
+
+		// get highest cmc with the most cards
+		$maxCMC = max(array_keys($cmcCounts, max($cmcCounts)));
+
+		// go through cards, cut one with highest, most populated cmc
+		//XXX: do this more methodically? perhaps go by rarity?
+		foreach($p as $index => $card) {
+			if($card->getCMC() == $maxCMC) {
+				unset($p[$index]);
+				break;
+			}
+		}
+		return $p;
+	}
+
 	// add basic lands
 	public function addBasics($p) {
 		//total mana symbols so we can find the right split
@@ -150,11 +185,11 @@ class Controller {
 
 		//actually add the basics to pool
 		//XXX: do something about wastes
-		for($i=0; $i<$basicsCount["W"];$i++) $p[] = new Card(0, "Plains", "W", 0, 0, "B", "Basic Land");
-		for($i=0; $i<$basicsCount["U"];$i++) $p[] = new Card(0, "Island", "U", 0, 0, "B", "Basic Land");
-		for($i=0; $i<$basicsCount["B"];$i++) $p[] = new Card(0, "Swamp", "B", 0, 0, "B", "Basic Land");
-		for($i=0; $i<$basicsCount["R"];$i++) $p[] = new Card(0, "Mountain", "R", 0, 0, "B", "Basic Land");
-		for($i=0; $i<$basicsCount["G"];$i++) $p[] = new Card(0, "Forest", "G", 0, 0, "B", "Basic Land");
+		for($i=0;$i<$basicsCount["W"];$i++) $p[] = new Card(0, "Plains", "W", 0, 0, "B", "Basic Land");
+		for($i=0;$i<$basicsCount["U"];$i++) $p[] = new Card(0, "Island", "U", 0, 0, "B", "Basic Land");
+		for($i=0;$i<$basicsCount["B"];$i++) $p[] = new Card(0, "Swamp", "B", 0, 0, "B", "Basic Land");
+		for($i=0;$i<$basicsCount["R"];$i++) $p[] = new Card(0, "Mountain", "R", 0, 0, "B", "Basic Land");
+		for($i=0;$i<$basicsCount["G"];$i++) $p[] = new Card(0, "Forest", "G", 0, 0, "B", "Basic Land");
 		return $p;
 	}
 
