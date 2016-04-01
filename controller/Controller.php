@@ -41,7 +41,7 @@ class Controller {
 
 		$pool = $this->processPool($pool);
 
-		include 'view/pool.php';
+		include 'view/deck.php';
 	}
 
 	// populate pool
