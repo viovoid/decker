@@ -178,12 +178,12 @@ class Controller {
 
 	// add basic lands
 	public function addBasics($p) {
-		//total mana symbols so we can find the right split
+		// total mana symbols so we can find the right split
 		$manaSymbols = $this->countManaSymbols($p);
 		$landSlots = $this->model->getSize() - count($p);
 		$basicsCount = $this->calcBasics($manaSymbols, $landSlots);
 
-		//actually add the basics to pool
+		// actually add the basics to pool
 		//XXX: do something about wastes
 		for($i=0;$i<$basicsCount["W"];$i++) $p[] = new Card(0, "Plains", "W", 0, 0, "B", "Basic Land");
 		for($i=0;$i<$basicsCount["U"];$i++) $p[] = new Card(0, "Island", "U", 0, 0, "B", "Basic Land");
@@ -193,7 +193,7 @@ class Controller {
 		return $p;
 	}
 
-	//count total mana symbols per color in pool
+	// count total mana symbols per color in pool
 	public function countManaSymbols($p) {
 		//XXX: if adding other sets, add phyrexian/snow/etc
 			$symbols = array("C"=>0,
@@ -213,15 +213,48 @@ class Controller {
 		return $symbols;
 	}
 
-	//determine basics split from mana symbols
+	// determine basics split from mana symbols
 	public function calcBasics($manaSymbols, $landCount) {
 		$totalSymbols = array_sum($manaSymbols);
-		$basics["C"] = round($manaSymbols["C"] / $totalSymbols * $landCount);
-		$basics["W"] = round($manaSymbols["W"] / $totalSymbols * $landCount);
-		$basics["U"] = round($manaSymbols["U"] / $totalSymbols * $landCount);
-		$basics["B"] = round($manaSymbols["B"] / $totalSymbols * $landCount);
-		$basics["R"] = round($manaSymbols["R"] / $totalSymbols * $landCount);
-		$basics["G"] = round($manaSymbols["G"] / $totalSymbols * $landCount);
+		$basics = array();
+		if($totalSymbols != 0) {
+			$basics["W"] = round($manaSymbols["W"] / $totalSymbols) * $landCount;
+			$basics["U"] = round($manaSymbols["U"] / $totalSymbols) * $landCount;
+			$basics["B"] = round($manaSymbols["B"] / $totalSymbols) * $landCount;
+			$basics["R"] = round($manaSymbols["R"] / $totalSymbols) * $landCount;
+			$basics["G"] = round($manaSymbols["G"] / $totalSymbols) * $landCount;
+		}
+
+		// if we still don't have 40/60 cards,
+		// 	we need to add more
+		$difference = $landCount - array_sum($basics);
+		if($difference > 0) {
+			// find out which color(s) we're deepest in
+			$mainColors = array_keys($basics, max($basics));	
+
+			// go deeper in it/them
+			// add an equal number of each 
+			if(!empty($mainColors)) {
+				foreach($mainColors as $color) {
+					$basics[$color] += round($difference / count($mainColors));
+				}
+			}
+
+			// if there are still not enough cards,
+			// 	we'll just pad it with first in WUBRG
+			$difference = $landCount - array_sum($basics);
+			if($difference > 0 && !empty($mainColors)) {
+				$basics[$mainColors[0]] += $difference;
+			}
+
+			// if there are STILL not enough cards,
+			// 	give it some islands, because they're objectively best
+			$difference = $landCount - array_sum($basics);
+			if($difference > 0) {
+				$basics["U"] += $difference;
+			}
+			
+		}
 		return $basics;
 	}
 	
