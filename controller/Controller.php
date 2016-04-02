@@ -217,12 +217,12 @@ class Controller {
 	public function calcBasics($manaSymbols, $landCount) {
 		$totalSymbols = array_sum($manaSymbols);
 		$basics = array();
-		if($totalSymbols != 0) {
-			$basics["W"] = round($manaSymbols["W"] / $totalSymbols) * $landCount;
-			$basics["U"] = round($manaSymbols["U"] / $totalSymbols) * $landCount;
-			$basics["B"] = round($manaSymbols["B"] / $totalSymbols) * $landCount;
-			$basics["R"] = round($manaSymbols["R"] / $totalSymbols) * $landCount;
-			$basics["G"] = round($manaSymbols["G"] / $totalSymbols) * $landCount;
+		if($totalSymbols > 0) {
+			$basics["W"] = round($manaSymbols["W"] / $totalSymbols * $landCount);
+			$basics["U"] = round($manaSymbols["U"] / $totalSymbols * $landCount);
+			$basics["B"] = round($manaSymbols["B"] / $totalSymbols * $landCount);
+			$basics["R"] = round($manaSymbols["R"] / $totalSymbols * $landCount);
+			$basics["G"] = round($manaSymbols["G"] / $totalSymbols * $landCount);
 		}
 
 		// if we still don't have 40/60 cards,
