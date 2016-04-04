@@ -1,3 +1,4 @@
+<font color="white">
 <?php
 echo "Deck size: " . $size . "<br>";
 echo "Colors: ";
@@ -9,3 +10,4 @@ foreach($pool as $index => $card) {
 	echo $index+1 . " " . $card->name . "<br>";
 }
 ?>
+</font>

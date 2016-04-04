@@ -22,13 +22,15 @@ class Model {
 		//make our cards
 		$cards = array();
         foreach($jsonCards as $jsonCard) {
-            $cards[] = new Card($jsonCard["number"],
-                                $jsonCard["name"],
-                                $jsonCard["colorIdentity"],
-								$jsonCard["manaCost"],
-                                $jsonCard["cmc"],
-                                $jsonCard["rarity"],
-                                $jsonCard["types"]);
+			if(strpos($jsonCard["number"], "b") == false) {
+				$cards[] = new Card(rtrim($jsonCard["number"], 'a'),
+									$jsonCard["name"],
+									$jsonCard["colorIdentity"],
+									$jsonCard["manaCost"],
+									$jsonCard["cmc"],
+									$jsonCard["rarity"],
+									$jsonCard["types"]);
+			}
 		}
 
 		return $cards;
