@@ -12,7 +12,7 @@ class Model {
 	public function getSetCardList() {
 
 		// we'll hardcode the set for now
-		$set = "BFZ";
+		$set = "SOI";
 		// XXX: this should be made a relative path
 		$rawJson = file_get_contents("/srv/http/decker/json/" . $set . ".json");
 		$json = json_decode($rawJson, true);

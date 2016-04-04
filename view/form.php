@@ -28,6 +28,7 @@ nal.dtd">
 
 		body {
 		  background: url("http://cdn.shopify.com/s/files/1/0514/0113/files/Facebook_Cover_Photo_EN.jpg?8910001730877757600") no-repeat left fixed;
+		  background: url("http://www.manaleak.com/mtguk/files/2015/10/Shadows-over-Innistrad-wallpaper.jpg") no-repeat left fixed;
 		  -webkit-background-size: cover;
 		  -moz-background-size: cover;
 		  -o-background-size: cover;
