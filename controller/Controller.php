@@ -40,6 +40,7 @@ class Controller {
 		$colors = $this->model->getColors();
 
 		$pool = $this->processPool($pool);
+		$deck = array_values($pool);
 
 		include 'view/deck.php';
 	}
